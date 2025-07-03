@@ -61,4 +61,4 @@ class Dealer(Player):
     def collect_cards(self, players):
         """Collect all cards from all players and discard."""
         for player in players:
-            player.deck = []
+            player.hand = []

@@ -159,4 +159,4 @@ while any(player.money > 0 for player in players):
                             print('{} loses.'.format(player.name))
 
             print('This round has ended.')
-            dealer.collect_cards(players + players_to_remove)
+            dealer.collect_cards(players + players_to_remove + [dealer])
