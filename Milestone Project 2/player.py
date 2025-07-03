@@ -12,7 +12,8 @@ class Player:
         if len(self.hand) == 0:
             print('{} holds no cards'.format(self.name))
         else:
-            print('{} shows '.format(self.name) + ' and '.join(self.hand))
+            hand_str = [str(card) for card in self.hand]
+            print('{} shows '.format(self.name) + ' and '.join(hand_str))
     
     def hit(self, card):
         self.hand.append(card)
@@ -23,13 +24,13 @@ class Player:
         if amt > self.money:
             print('{} cannot bet more money than they have'.format(self.name))
             return 0
+        elif amt == 0:
+            print('{} must bet more than 0'.format(self.name))
+            return 0
         else:
             self.money -= amt
             print('{} bets {}'.format(self.name, amt))
             return amt
-    
-    def prepare_deal(self):
-        self.hand = []
         
 class Dealer(Player):
     def __init__(self, deck):
@@ -37,15 +38,27 @@ class Dealer(Player):
         self.deck = deck
     
     def initial_deal(self, players):
+        """Perform the initial deal--two cards to every player."""
         for _ in range(2):
             for player in players:
                 player.hand.append(self.deck.deal_card())
     
     def deal(self, player):
-        player.hit(self.deck.deal_card())
+        """Add card to player's hand."""
+        card = self.deck.deal_card()
+        player.hit(card)
+        return card
     
-    def print_hand(self):
+    def print_dealer_hand(self):
+        """Print dealer's hand before all players have gone.
+        print_hand() should be used after all players moves are final.
+        """
         if len(self.hand) == 0:
             print('{} holds no cards'.format(self.name))
         else:
-            print('{} shows '.format(self.name) + self.hand[0])
+            print('{} shows '.format(self.name) + str(self.hand[0]))
+    
+    def collect_cards(self, players):
+        """Collect all cards from all players and discard."""
+        for player in players:
+            player.deck = []
